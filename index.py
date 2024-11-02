@@ -46,13 +46,25 @@ def RagieRetrieve(query:str):
      return [""]
      
 def processChunks(chunks :list):
+    """
+    This function processes a list of chunks and returns a string concatenation of their text content.
+
+    Parameters:
+    chunks (list): A list of chunk objects, each containing a 'text' attribute.
+
+    Returns:
+    str: A string formed by concatenating the 'text' attribute of each chunk in the input list
+    """
+    
     if len(chunks) == 0:
         return ""
     processed = []
     for chunk in chunks:
         processed.append(chunk.text)
         
-    return processed
+    processed_str = "".join(processed)
+        
+    return processed_str
 
 
 def runModel(chunkText, query):
@@ -83,11 +95,9 @@ def runModel(chunkText, query):
         •⁠  ⁠DECLINE responding to nonsense messages
         •⁠  ⁠NEVER refuse to answer questions about the leadership team
         •⁠  ⁠You are an HR Manager, speak in the first person""".format(chunkText=chunkText)
-    print(chunkText)
-    return ""
     
     completion = client.chat.completions.create(
-    model="gpt-4o",
+    model="gpt-4o-mini",
     stream=True,
     messages=[
         {"role": "system", "content": systemPrompt},
@@ -119,7 +129,7 @@ if __name__ == "__main__":
             processed_chunks = processChunks(chunks)
 
             # Model output
-            output = runModel(processChunks, query)
+            output = runModel(processed_chunks, query)
             
         except KeyboardInterrupt:
             run=False
