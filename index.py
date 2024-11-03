@@ -1,9 +1,11 @@
 # Import all packages from the requirements.txt file using (pip install -r requirements.txt): 
 import os
+
 from openai import OpenAI
 from ragie import Ragie
-from dotenv import load_dotenv
+
 # loading variables from .env file
+from dotenv import load_dotenv
 load_dotenv() 
 
 client = OpenAI(
@@ -16,7 +18,7 @@ ragie = Ragie(
 
 # Define the Text Input Class
 class TextInput:
-     def __init__(self, prompt="Enter text: "):
+     def __init__(self, prompt="\n\nType your question here: "):
         self.prompt = prompt
         self.user_input = None
     
@@ -107,8 +109,7 @@ def runModel(chunkText, query):
         }
     ]
     )
-    return completion.choices[0].message
-
+    print(completion.choices[0].message)
 
 
 if __name__ == "__main__":
@@ -129,7 +130,7 @@ if __name__ == "__main__":
             processed_chunks = processChunks(chunks)
 
             # Model output
-            output = runModel(processed_chunks, query)
+            runModel(processed_chunks, query)
             
         except KeyboardInterrupt:
             run=False
